@@ -1,10 +1,11 @@
 import joblib
 import re
+import os
 import pandas as pd
 from pathlib import Path
 
-MODEL_PATH = str(Path("../model/phishing_model_lr.joblib").resolve())
-VECTORIZER_PATH = str(Path("../model/tfidf_vectorizer.joblib").resolve())
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "../model/phishing_model_lr.joblib")
+VECTORIZER_PATH = os.path.join(os.path.dirname(__file__), "../model/tfidf_vectorizer.joblib")
 
 def load_model_vectorizer():
     model = joblib.load(MODEL_PATH)
