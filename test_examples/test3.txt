@@ -1,0 +1,10 @@
+Subject: Password Expiry Notification
+
+Dear User,
+
+Your university email password will expire today. Kindly click below to update your password to avoid interruption:
+
+[Update Password](http://up.ac.za-security-check.net)
+
+Thank you,
+IT Support

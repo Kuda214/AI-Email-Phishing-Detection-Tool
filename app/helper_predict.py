@@ -38,7 +38,7 @@ def preprocess_email(content):
     }
     return pd.DataFrame([data])
 
-def get_global_top_phishing_terms(model, vectorizer, topn=12):
+def get_global_top_phishing_terms(model, vectorizer, topn=8):
     feature_names = vectorizer.get_feature_names_out()
     topn_idx = model.coef_[0].argsort()[-topn:][::-1]
     return [feature_names[i] for i in topn_idx]
@@ -54,18 +54,16 @@ def get_top_contributing_features(email_text, model, vectorizer, topn=6):
     contribs = sorted(contribs, key=lambda x: abs(x[1]), reverse=True)
     return contribs[:topn] if contribs else []
 
-def highlight_suspicious_model(text, model, vectorizer, sender_addr=None, topn=12):
-    # highlight all top phishing terms in input text
-    phishing_terms = get_global_top_phishing_terms(model, vectorizer, topn=topn)
-    for phrase in sorted(phishing_terms, key=lambda x: -len(x)):
-        pattern = re.compile(rf'({re.escape(phrase)})', re.IGNORECASE)
-        text = pattern.sub(r'<mark class="orange-mark">\1</mark>', text)
-    # suspicious senders: highlight known free/public email and "unknown"
-    suspicious_senders = [".ru", ".cn", "qq.com", "163.com", "protonmail", "yopmail", "unknown"]
-    if sender_addr:
-        for sus in suspicious_senders:
-            if sus in sender_addr.lower():
-                text = text.replace(sender_addr, f'<span class="sender-meta">{sender_addr}</span>')
+def highlight_suspicious_model(text, weights_dict):
+    if not weights_dict:
+        return text
+    for word, weight in weights_dict.items():
+        if weight > 0:
+            style = "background:#ff9800;color:#181a1b; border-radius:3px; padding:1px 5px;"
+        else:
+            style = "background:#abdfbc;color:#18291e; border-radius:3px; padding:1px 5px;"
+        pattern = re.compile(rf"(\b{re.escape(word)}\b)", re.IGNORECASE)
+        text = pattern.sub(rf'<span style="{style}">\1</span>', text)
     return text
 
 def predict_email(content):
@@ -80,9 +78,9 @@ def predict_email(content):
     pred = model.predict(X_pred)[0]
     conf = model.predict_proba(X_pred)[0].max()
     label = "phishing" if pred == 1 else "legitimate"
-    # Explainability
     top_features = get_top_contributing_features(content, model, vectorizer)
-    sender = df.loc[0,"sender"]
-    highlighted = highlight_suspicious_model(content, model, vectorizer, sender_addr=sender)
+    weights_dict = {w: weight for w, weight in top_features}
+    sender = df.loc[0, "sender"]
+    highlighted = highlight_suspicious_model(content, weights_dict)
     global_phish_terms = get_global_top_phishing_terms(model, vectorizer)
     return label, int(conf * 100), top_features, sender, highlighted, global_phish_terms

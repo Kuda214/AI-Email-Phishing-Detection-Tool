@@ -1,0 +1,10 @@
+Subject: Invoice #99821 Due Today
+
+Dear Customer,
+
+Please find attached your invoice for services rendered. Kindly settle the amount due within 24 hours to avoid service suspension.
+
+Download Invoice: [invoice99821.zip](http://suspicious-invoice.download)
+
+Regards,
+Billing Department

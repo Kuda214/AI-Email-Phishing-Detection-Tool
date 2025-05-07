@@ -1,0 +1,12 @@
+Subject: Urgent: Unusual Activity Detected in Your Bank Account
+
+Dear Customer,
+
+We noticed suspicious activity in your account. For your security, we have temporarily suspended your access. Please verify your account immediately by clicking the link below:
+
+[Verify Now](http://fakebank-login.secure-now.com)
+
+Failure to verify will result in permanent account suspension.
+
+Thank you,
+Banking Security Team
