@@ -12,6 +12,8 @@ class Colors:
     WARNING = '\033[93m'
     FAIL    = '\033[91m'
     ENDC    = '\033[0m'
+    OKCYAN  = '\033[96m'
+    HEADER  = '\033[95m'
 
 def train_phishing_model(preprocessed_csv, model_path="phishing_model_lr.joblib", vectorizer_path="tfidf_vectorizer.joblib"):
     print(f"{Colors.OKCYAN}\n>>> TRAINING & EVALUATION ({preprocessed_csv}) <<<{Colors.ENDC}")
